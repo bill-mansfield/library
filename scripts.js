@@ -4,10 +4,6 @@ Library
 
 let library = [];
 
-addBookToLibrary("kingrat", "doctor spielberg", 567, true, "the best god damn book ever made");
-addBookToLibrary("ratking", "mr henry", 57, true, "the best god damn book ever made");
-addBookToLibrary("boyrat", "mr henry", 57, true, "the best god damn book ever made");
-
 /*
 Dom trash
 */
@@ -19,22 +15,28 @@ var shelf = document.createElement("div");
 Book Constuctor
 */
 
+// addBookToLibrary("heck", "yes", 123, true, "noinfo");
+
 function submitForm() {
     var formTitle = document.getElementById("title").value;
     var formAuthor = document.getElementById("author").value;
     var formPages = document.getElementById("pages").value;
-    var formIsread = document.getElementById("isread").value;
+        if (document.getElementById("isReadTrue").checked) {
+            var formIsRead = true;
+        } else {
+            var formIsRead = false;
+        }
     var formInfo = document.getElementById("info").value;
-    addBookToLibrary(formTitle, formAuthor, formPages, formIsread, formInfo);
+    addBookToLibrary(formTitle, formAuthor, formPages, formIsRead, formInfo);
     renderNewBook();
 }
 
 function Book(title, author, pages, isRead, info) {
-    this.title  = title;
-    this.author = author;
-    this.pages  = pages;
-    this.isRead = isRead;
-    this.info   = info;
+    this.title     = title;
+    this.author    = author;
+    this.pages     = pages;
+    this.isRead    = isRead;
+    this.info      = info;
 }
 
 function addBookToLibrary(title, author, pages, isRead, info) {
@@ -42,7 +44,6 @@ function addBookToLibrary(title, author, pages, isRead, info) {
 }
 
 var iterate = 0;
-
 function renderNewBook() {
     var shelf = document.createElement("div");
 
@@ -52,20 +53,23 @@ function renderNewBook() {
         var arrKeys = Object.keys(newBook);
 
         var paragraph = document.createElement("p");
+        var span = document.createElement("span");
+        span.innerHTML = arrKeys[i];
         paragraph.innerHTML = arr[i];
-
+        
         if (arrKeys[i] === "isRead") {
-            paragraph.setAttribute("title", arr[i]);
+            paragraph.setAttribute("isreadstatus", arr[i]);
+            paragraph.setAttribute("id", arr[0]);
         }
-
+        shelf.appendChild(span);
         shelf.appendChild(paragraph);
     }
 
-    iterate++;
     var removebtn = document.createElement("button");
     removebtn.innerHTML = "Remove";
     var changeReadStatus = document.createElement("button");
-    changeReadStatus.innerHTML = "Have you read this book?";
+    changeReadStatus.innerHTML = "Change read status?";
+    changeReadStatus.setAttribute("index", iterate);
     changeReadStatus.addEventListener("click", updateIsRead);
     removebtn.setAttribute("index", iterate);
     removebtn.addEventListener("click", removeBook);
@@ -73,11 +77,20 @@ function renderNewBook() {
     shelf.appendChild(removebtn);
     shelf.appendChild(changeReadStatus);
     bookcase.appendChild(shelf);
+    iterate++;
 }
 
 function updateIsRead() {
-    Book.prototype.isRead
-    if (this)
+    var parentID = this.getAttribute("index");
+    var selectedBook = library[parentID];
+
+    if (selectedBook.isRead === true) {
+        selectedBook.isRead = false;
+        document.getElementById(selectedBook.title).innerHTML = "false";
+    } else {
+        selectedBook.isRead = true;
+        document.getElementById(selectedBook.title).innerHTML = "true";
+    }
 }
 
 function removeBook() {
